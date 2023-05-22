@@ -1,0 +1,97 @@
+*.trace
+*.mk
+lamg-2.2-2
+CMG_101014
+instances
+.settings*
+plots
+*~
+*.dot$
+tracelog*
+*.json
+*.csv
+scripts/SparsificationEvaluation/input/
+scripts/SparsificationEvaluation/output/
+scripts/SparsificationEvaluation/figures
+input/backbones/
+Doc/Website
+Doc/Documentation
+sandbox
+profiling
+EnsembleClustering-D
+EnsembleClustering-DPar
+EnsembleClustering-O
+/NetworKit-Comm*
+*.orig
+*.eps
+doxygen
+dist/
+
+### NetworKit specific
+include/NetworKit
+NetworKit-Tests-*
+.buildDbg/
+output
+benchmark/
+_NetworKit.cpp
+build/
+/build*
+/.build*
+lib/
+include/tlx
+
+### IDE
+*.project
+*.cproject
+*.vim
+
+### Python
+networkit.egg-info/
+*.egg$
+__pycache__
+
+### C++
+*.d
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+*.so
+*.dylib
+*.dll
+*.mod
+*.smod
+*.lai
+*.la
+*.a
+*.lib
+*.exe
+*.out
+*.app
+
+### CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+### Ninja
+.ninja_deps
+.ninja_log
+
+### Cython
+*.pyc
+
+### JupyterNotebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+### MacOS
+.DS_Store
