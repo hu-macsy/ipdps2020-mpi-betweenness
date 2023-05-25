@@ -1,0 +1,443 @@
+builds:
+  - name: networkit
+    git: 'https://github.com/avdgrinten/networkit.git'
+    regenerate:
+      - args: ['git', 'submodule', 'update', '--init']
+    configure:
+      - args:
+          - 'cmake'
+          - '-DCMAKE_INSTALL_PREFIX=@THIS_PREFIX_DIR@'
+          - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+          - '-DNETWORKIT_NODE_STORAGE=u32'
+          - '@THIS_CLONE_DIR@'
+        environ:
+            'CXX': 'g++'
+    compile:
+      - args: ['make', '-j@PARALLELISM@']
+    install:
+      - args: ['make', 'install']
+
+  - name: fabry
+    git: 'file:///work/global/mpi-betweenness/fabry'
+    configure:
+      - args:
+          - 'meson'
+          - '--prefix=@THIS_PREFIX_DIR@'
+          - '--buildtype=debugoptimized'
+          - '@THIS_CLONE_DIR@'
+        environ:
+            'CXX': 'mpic++'
+            'CXXFLAGS': '-fpermissive'
+    compile:
+      - args: ['ninja-build']
+    install:
+      - args: ['ninja-build', 'install']
+
+  - name: dist-kadabra
+    git: 'file:///work/global/mpi-betweenness/dist-kadabra'
+    requires:
+      - fabry
+      - networkit
+    configure:
+      - args:
+          - 'meson'
+          - '--prefix=@THIS_PREFIX_DIR@'
+          - '--buildtype=debugoptimized'
+          - '@THIS_CLONE_DIR@'
+        environ:
+            'CXX': 'g++'
+            'CXXFLAGS': '-DNETWORKIT_U32_NODES'
+    compile:
+      - args: ['ninja-build']
+    install:
+      - args: ['ninja-build', 'install']
+      # FIXME: The following is a huge hack!
+      - args: ['mkdir', '-p', '@THIS_PREFIX_DIR@/lib64/']
+      - args: ['ln', '-sf', '/opt/gcc-9/lib64/libstdc++.so.6', '@THIS_PREFIX_DIR@/lib64/']
+
+revisions:
+  - name: initial
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '0cfd04e1ea39c78d9f918cededd49b8fc9f2bd3b'
+        'dist-kadabra': '8d0e4d251d62c62945fc07a629b7923913faecf6'
+  - name: shorter-epochs
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '0cfd04e1ea39c78d9f918cededd49b8fc9f2bd3b'
+        'dist-kadabra': 'dcd268af45c6c80ebeced3a6881570a26b34bcc4'
+  - name: initial-reduction
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
+        'dist-kadabra': '76ca8c34a4355b5472fa9b9f960baa700e0f306f'
+  - name: initial-logrounds
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '0cfd04e1ea39c78d9f918cededd49b8fc9f2bd3b'
+        'dist-kadabra': 'f367bfd92a92e5cc1a47ee3de7f03d291ac34309'
+  - name: active
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'fcb42055b5aefc13685424e6e0516e3be9fe21ac'
+        'dist-kadabra': '5ee5c565a19e76760ee14c162c184ef368dc10e0'
+  # opt: Avoid CC decomposition, useless barriers, 
+  - name: opt
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
+        'dist-kadabra': '65c43f67381f90f75e3a8a0c4dfbd54b407549bc'
+  # optI: Based on opt. Cherry-pick shorter-epochs.
+  - name: optI
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
+        'dist-kadabra': '2581744ba38933033492686c7ef9220006295755'
+  # optI-reduction: Based on optI + initial-reduction. Additionally: avoid barrier before reduction.
+  - name: optI-reduction
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
+        'dist-kadabra': '41ee5376cf80774d2500369cc16f4524a99fe7d0'
+  - name: optI-hybrid
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '33055b283d83538fd3165ca3edd46a096abfa01d'
+        'dist-kadabra': '38c601f2b6f3cf5be6d2cc9d18bb0a2a9f827151'
+  - name: optI-fastadv
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '33055b283d83538fd3165ca3edd46a096abfa01d'
+        'dist-kadabra': '86c789a5a3fff12a8bf038ad8f380f801f008af3'
+  - name: all-scores
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
+        'dist-kadabra': '347c576a9cabdbe3c6d98c6502f94c230a476c0e'
+  - name: optI-insights
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
+        'dist-kadabra': '83eaa5516695a5ce0d2a2d4585256a09f6abe13c'
+  - name: optI-blocking
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
+        'dist-kadabra': '3222048fa8941e48f19125ffa0bde5ab30403865'
+  - name: optI-blockhybrid
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
+        'dist-kadabra': '1c2818df1f2aa7db6707d222f45b095cb857ea13'
+  - name: optB-blocking
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
+        'dist-kadabra': '541ab7ee6ebecb1cff74d34974bc7bf28b943739'
+  - name: optB-fullblocking
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
+        'dist-kadabra': '0f00d1134a5dff6e821640bc80e9c4b5bb7d267f'
+  - name: optI-blocking-dual
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
+        'dist-kadabra': 'd627dbde26fd3b1589e1e959e5a58fc18de2f5d1'
+  - name: optI-blockhybrid-dual
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
+        'dist-kadabra': '3241f5b179f8cb79bc578535a28db63b04a36136'
+  - name: optS
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '83ab1c7832a4eb74bb93c0f457a4448b8d15b373'
+        'dist-kadabra': '131015b0fd9d5df27d2a094dd8379f6b76f24032'
+  - name: optS-distest
+    build_version:
+        'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
+        'fabry': '83ab1c7832a4eb74bb93c0f457a4448b8d15b373'
+        'dist-kadabra': '7a7cc99c9aa37e806609f83a1516c902d904e948'
+
+instdir: ./instances
+instances:
+  - repo: local
+    set: [main, explore]
+    items:
+      # Social networks.
+      #- twitter.tf.nkbg
+      #- friendster.tf.nkbg
+      # Road networks.
+      - roadNet-CA.tf.nkbg
+      - roadNet-PA.tf.nkbg
+      # Hyperlink.
+      #- dimacs10-uk-2002.tf.nkbg
+      #- dimacs10-uk-2007-05.tf.nkbg
+      #- wikipedia_link_en.tf.nkbg
+  - repo: local
+    set: main
+    items:
+      # Social networks.
+      - orkut-links.tf.nkbg
+      # Road networks.
+      - dimacs9-NE.tf.nkbg
+      # Hyperlink.
+      - dbpedia-link.tf.nkbg
+  - repo: local
+    set: scale
+    items:
+      - hyperbolic-sc23-s1.tf.nkbg
+      #- hyperbolic-sc23-s2.tf.nkbg
+      #- hyperbolic-sc23-s3.tf.nkbg
+      #- hyperbolic-sc24-s1.tf.nkbg
+      #- hyperbolic-sc24-s2.tf.nkbg
+      #- hyperbolic-sc24-s3.tf.nkbg
+      #- hyperbolic-sc25-s1.tf.nkbg
+      #- hyperbolic-sc25-s2.tf.nkbg
+      #- hyperbolic-sc25-s3.tf.nkbg
+      #- hyperbolic-sc26-s1.tf.nkbg
+      #- hyperbolic-sc26-s2.tf.nkbg
+      #- hyperbolic-sc26-s3.tf.nkbg
+      #- hyperbolic-sc27-s1.tf.nkbg
+      #- hyperbolic-sc27-s2.tf.nkbg
+      #- hyperbolic-sc27-s3.tf.nkbg
+      - rmat-sc23-s1.tf.nkbg
+      #- rmat-sc23-s2.tf.nkbg
+      #- rmat-sc23-s3.tf.nkbg
+      #- rmat-sc24-s1.tf.nkbg
+      #- rmat-sc24-s2.tf.nkbg
+      #- rmat-sc24-s3.tf.nkbg
+      #- rmat-sc25-s1.tf.nkbg
+      #- rmat-sc25-s2.tf.nkbg
+      #- rmat-sc25-s3.tf.nkbg
+      #- rmat-sc25-s4.tf.nkbg
+      #- rmat-sc26-s1.tf.nkbg
+      #- rmat-sc26-s2.tf.nkbg
+      #- rmat-sc26-s3.tf.nkbg
+
+experiments:
+  - name: n01
+    use_builds: [dist-kadabra]
+    args: &common_args
+      - 'srun'
+      - '--mpi=pmi2'
+      - 'dist-kadabra'
+      - '@INSTANCE@'
+    num_nodes: 1
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+  - name: n02
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 2
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+  - name: n04
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 4
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+  - name: n08
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 8
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+  - name: n16
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 16
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+
+  - name: n01x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+  - name: n02x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 2
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+  - name: n04x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 4
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+  - name: n08x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 8
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+  - name: n16x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 16
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+
+  - name: t02
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 2
+      OMP_PLACES: 'cores'
+  - name: t12
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+  - name: t24
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+  - name: t48
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    num_threads: 48
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 48
+      OMP_PLACES: 'cores'
+
+  - name: t01x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 1
+      OMP_PLACES: 'cores'
+  - name: t06x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 6
+      OMP_PLACES: 'cores'
+  - name: t12x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 12
+      OMP_PLACES: 'cores'
+  - name: t24x2
+    use_builds: [dist-kadabra]
+    args: *common_args
+    num_nodes: 1
+    procs_per_node: 2
+    num_threads: 24
+    output: 'stdout'
+    environ:
+      OMP_NUM_THREADS: 24
+      OMP_PLACES: 'cores'
+
+matrix:
+    include:
+      # Special experiments.
+      - experiments: [n08x2]
+        instsets: [explore]
+        revisions: [all-scores]
+
+      # Exploratory experiments.
+      #- instsets: [explore]
+      #  revisions: [initial]
+      - instsets: [explore]
+        experiments: [n01, n02, n04, n08, n16]
+        revisions: [shorter-epochs, initial-reduction, opt, optI-reduction]
+        # Dropped: initial-logrounds
+      #- instsets: [explore]
+      #  experiments: [n01, n02, n04, n08]
+      #  instsets: [explore]
+      #  revisions: []
+         # Dropped: active
+      - instsets: [explore]
+        experiments: [n01x2, n02x2, n04x2, n08x2]
+        instsets: [explore]
+        revisions: [optI-insights]
+        # Dropped: optI-fastadv
+
+      # Real-world running time experiments
+      # Shared-memory baseline.
+      - instsets: [main]
+        experiments: [n01]
+        revisions: [opt, optI-insights]
+      # New MPI algorithms.
+      - instsets: [main]
+        experiments: [n01x2, n02x2, n04x2, n08x2, n16x2]
+        revisions: [optI-reduction, optI-hybrid, optI-blocking, optI-blockhybrid, optB-blocking, optB-fullblocking, optI-blocking-dual, optI-blockhybrid-dual, optS, optS-distest]
+
+      # Scaling experiments.
+      - instsets: [scale]
+        experiments: [n16x2]
+        revisions: [optI-reduction]
+        # Dropped: optI-blocking
+
+      # NUMA experiments.
+      #- instsets: [explore]
+      #  experiments: [t02, t12, t24, t48, t01x2, t06x2, t12x2, t24x2]
+      #  revisions: [optI]
