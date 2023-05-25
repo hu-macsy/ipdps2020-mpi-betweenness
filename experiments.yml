@@ -18,7 +18,7 @@ builds:
       - args: ['make', 'install']
 
   - name: fabry
-    git: 'file:///work/global/mpi-betweenness/fabry'
+    git: 'https://github.com/hu-macsy/fabry.git'
     configure:
       - args:
           - 'meson'
@@ -34,7 +34,7 @@ builds:
       - args: ['ninja-build', 'install']
 
   - name: dist-kadabra
-    git: 'file:///work/global/mpi-betweenness/dist-kadabra'
+    git: 'https://github.com/hu-macsy/dist-kadabra.git'
     requires:
       - fabry
       - networkit
@@ -59,106 +59,106 @@ revisions:
   - name: initial
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '0cfd04e1ea39c78d9f918cededd49b8fc9f2bd3b'
-        'dist-kadabra': '8d0e4d251d62c62945fc07a629b7923913faecf6'
+        'fabry': 'f49eeecfde56744e9d6677a50c9b7caba3000d76'
+        'dist-kadabra': 'db3c0ad9aa66e93f8d187f4b5518b837ef1d12a7'
   - name: shorter-epochs
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '0cfd04e1ea39c78d9f918cededd49b8fc9f2bd3b'
-        'dist-kadabra': 'dcd268af45c6c80ebeced3a6881570a26b34bcc4'
+        'fabry': 'de8986c5289269390280b1d9b7905cbf2108254d'
+        'dist-kadabra': 'cf3fb8e1db3d542656170e2cb7228bf5eed26f64'
   - name: initial-reduction
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
-        'dist-kadabra': '76ca8c34a4355b5472fa9b9f960baa700e0f306f'
+        'fabry': 'ec3fc6069759dbe73906babd2f7d03141ee7ff9f'
+        'dist-kadabra': 'eb62764a652bf82d432c6085ac2bf0af86a2fdef'
   - name: initial-logrounds
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '0cfd04e1ea39c78d9f918cededd49b8fc9f2bd3b'
-        'dist-kadabra': 'f367bfd92a92e5cc1a47ee3de7f03d291ac34309'
+        'fabry': 'f49eeecfde56744e9d6677a50c9b7caba3000d76'
+        'dist-kadabra': '2290d412e758fb74cd3485a6b4f077f2645aac70'
   - name: active
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'fcb42055b5aefc13685424e6e0516e3be9fe21ac'
-        'dist-kadabra': '5ee5c565a19e76760ee14c162c184ef368dc10e0'
+        'fabry': 'f2716e03cc86bbb19819d2030b2c704c4c803c44'
+        'dist-kadabra': '0829130d59a1f1de3a2477ef493aee0b9a2350ce'
   # opt: Avoid CC decomposition, useless barriers, 
   - name: opt
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
-        'dist-kadabra': '65c43f67381f90f75e3a8a0c4dfbd54b407549bc'
+        'fabry': 'ec3fc6069759dbe73906babd2f7d03141ee7ff9f'
+        'dist-kadabra': 'bd93973c6d4cdacdde62bc893ac8b2763474fc70'
   # optI: Based on opt. Cherry-pick shorter-epochs.
   - name: optI
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
-        'dist-kadabra': '2581744ba38933033492686c7ef9220006295755'
+        'fabry': 'fc771ea642a1ed4c223ba861eecab3deaf9fdc28'
+        'dist-kadabra': '6623cb0edb663e26c6fa4490968d6552a9420832'
   # optI-reduction: Based on optI + initial-reduction. Additionally: avoid barrier before reduction.
   - name: optI-reduction
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
-        'dist-kadabra': '41ee5376cf80774d2500369cc16f4524a99fe7d0'
+        'fabry': 'd90e39530c8a4fd88d27e78ecffce0b169465227'
+        'dist-kadabra': 'dc59bf7ae9761703e9c0007d32f7a68829f2acdd'
   - name: optI-hybrid
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '33055b283d83538fd3165ca3edd46a096abfa01d'
-        'dist-kadabra': '38c601f2b6f3cf5be6d2cc9d18bb0a2a9f827151'
+        'fabry': '5a252d24c619b13fc90f0e2a0804d4b5d89ab505'
+        'dist-kadabra': 'aae55ca374ad0654d23953b79109ecedefa0f9ee'
   - name: optI-fastadv
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '33055b283d83538fd3165ca3edd46a096abfa01d'
-        'dist-kadabra': '86c789a5a3fff12a8bf038ad8f380f801f008af3'
+        'fabry': '5a252d24c619b13fc90f0e2a0804d4b5d89ab505'
+        'dist-kadabra': '68d7b731fa2a5e77ddf78457391c484d2eaca24b'
   - name: all-scores
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
-        'dist-kadabra': '347c576a9cabdbe3c6d98c6502f94c230a476c0e'
+        'fabry': '3eb99eec927e0253c325e9ab0e501a4bd6d7b9d3'
+        'dist-kadabra': '79eb2e14a80c0fab85bee669ca692d429a63a561'
   - name: optI-insights
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'db5445a8ca06e41af4f7c466f28a4ba93ee831a6'
-        'dist-kadabra': '83eaa5516695a5ce0d2a2d4585256a09f6abe13c'
+        'fabry': 'd90e39530c8a4fd88d27e78ecffce0b169465227'
+        'dist-kadabra': 'c719ef32331e3a2495f2daabf66c614d22824c91'
   - name: optI-blocking
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
-        'dist-kadabra': '3222048fa8941e48f19125ffa0bde5ab30403865'
+        'fabry': 'b4b2e686e40cbf24d4c1bfbfbf831120c9ed5ee0'
+        'dist-kadabra': '5623c9ab7b58bd92497b9a2f967e4e8fe96cb619'
   - name: optI-blockhybrid
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
-        'dist-kadabra': '1c2818df1f2aa7db6707d222f45b095cb857ea13'
+        'fabry': 'b4b2e686e40cbf24d4c1bfbfbf831120c9ed5ee0'
+        'dist-kadabra': 'f3268c9d5647b2348b89dc90b12d6995d5e52935'
   - name: optB-blocking
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
-        'dist-kadabra': '541ab7ee6ebecb1cff74d34974bc7bf28b943739'
+        'fabry': 'b4b2e686e40cbf24d4c1bfbfbf831120c9ed5ee0'
+        'dist-kadabra': '4c0d5798bf35d0dafb2b0f548accf95ef29c0959'
   - name: optB-fullblocking
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
-        'dist-kadabra': '0f00d1134a5dff6e821640bc80e9c4b5bb7d267f'
+        'fabry': 'b4b2e686e40cbf24d4c1bfbfbf831120c9ed5ee0'
+        'dist-kadabra': 'dbc26ab30f75d900bcf4045fe45866b8b6cd3fe2'
   - name: optI-blocking-dual
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
-        'dist-kadabra': 'd627dbde26fd3b1589e1e959e5a58fc18de2f5d1'
+        'fabry': 'b4b2e686e40cbf24d4c1bfbfbf831120c9ed5ee0'
+        'dist-kadabra': '22a1d10cc6aaae83bff1ac0ff2cf5407b1ae8054'
   - name: optI-blockhybrid-dual
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': 'd7f35bd37922972ab88ebe1c9278113c5a655c79'
-        'dist-kadabra': '3241f5b179f8cb79bc578535a28db63b04a36136'
+        'fabry': 'b4b2e686e40cbf24d4c1bfbfbf831120c9ed5ee0'
+        'dist-kadabra': 'aed6e766686a0fc1e38a1c2ae999398e517371f1'
   - name: optS
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '83ab1c7832a4eb74bb93c0f457a4448b8d15b373'
-        'dist-kadabra': '131015b0fd9d5df27d2a094dd8379f6b76f24032'
+        'fabry': 'de8986c5289269390280b1d9b7905cbf2108254d'
+        'dist-kadabra': '129ee54db64e0355747e818aeddfe073e4948787'
   - name: optS-distest
     build_version:
         'networkit': 'd680f815db7a3cd15be4938645731ed5400b3e3a'
-        'fabry': '83ab1c7832a4eb74bb93c0f457a4448b8d15b373'
-        'dist-kadabra': '7a7cc99c9aa37e806609f83a1516c902d904e948'
+        'fabry': 'de8986c5289269390280b1d9b7905cbf2108254d'
+        'dist-kadabra': '552f7d5d5ed6b5e820cc6a5392abfda10ee8a503'
 
 instdir: ./instances
 instances:
