@@ -181,10 +181,10 @@ instances:
      - dimacs9-NE.tf.nkbg
       # Hyperlink.
      - dbpedia-link.tf.nkbg
- - repo: local
-   set: scale
-   items:
-     - hyperbolic-sc23-s1.tf.nkbg
+  - repo: local
+    set: scale
+    items:
+      - hyperbolic-sc23-s1.tf.nkbg
       #- hyperbolic-sc23-s2.tf.nkbg
       #- hyperbolic-sc23-s3.tf.nkbg
       #- hyperbolic-sc24-s1.tf.nkbg
@@ -199,7 +199,7 @@ instances:
       #- hyperbolic-sc27-s1.tf.nkbg
       #- hyperbolic-sc27-s2.tf.nkbg
       #- hyperbolic-sc27-s3.tf.nkbg
-#      - rmat-sc23-s1.tf.nkbg
+      #- rmat-sc23-s1.tf.nkbg
       #- rmat-sc23-s2.tf.nkbg
       #- rmat-sc23-s3.tf.nkbg
       #- rmat-sc24-s1.tf.nkbg
@@ -375,47 +375,47 @@ experiments:
       OMP_PLACES: 'cores'
 
 matrix:
-    include:
-      # Special experiments.
-      - experiments: [n08x2]
-        instsets: [explore]
-        revisions: [all-scores]
+  include:
+  # Special experiments.
+  - experiments: [n08x2]
+    instsets: [explore]
+    revisions: [all-scores]
+  
+  # Exploratory experiments.
+  #- instsets: [explore]
+  #  revisions: [initial]
+  - instsets: [explore]
+    experiments: [n01, n02, n04, n08, n16]
+    revisions: [shorter-epochs, initial-reduction, opt, optI-reduction]
+  # Dropped: initial-logrounds
+  #- instsets: [explore]
+  #  experiments: [n01, n02, n04, n08]
+  #  instsets: [explore]
+  #  revisions: []
+  # Dropped: active
+  - instsets: [explore]
+    experiments: [n01x2, n02x2, n04x2, n08x2]
+    instsets: [explore]
+    revisions: [optI-insights]
+  # Dropped: optI-fastad
 
-      # Exploratory experiments.
-      #- instsets: [explore]
-      #  revisions: [initial]
-      - instsets: [explore]
-        experiments: [n01, n02, n04, n08, n16]
-        revisions: [shorter-epochs, initial-reduction, opt, optI-reduction]
-        # Dropped: initial-logrounds
-      #- instsets: [explore]
-      #  experiments: [n01, n02, n04, n08]
-      #  instsets: [explore]
-      #  revisions: []
-         # Dropped: active
-      - instsets: [explore]
-        experiments: [n01x2, n02x2, n04x2, n08x2]
-        instsets: [explore]
-        revisions: [optI-insights]
-        # Dropped: optI-fastadv
+  # Real-world running time experiments
+  # Shared-memory baseline.
+  - instsets: [main]
+    experiments: [n01]
+    revisions: [opt, optI-insights]
+  # New MPI algorithms.
+  - instsets: [main]
+    experiments: [n01x2, n02x2, n04x2, n08x2, n16x2]
+    revisions: [optI-reduction, optI-hybrid, optI-blocking, optI-blockhybrid, optB-blocking, optB-fullblocking, optI-blocking-dual, optI-blockhybrid-dual, optS, optS-distest]
 
-      # Real-world running time experiments
-      # Shared-memory baseline.
-      - instsets: [main]
-        experiments: [n01]
-        revisions: [opt, optI-insights]
-      # New MPI algorithms.
-      - instsets: [main]
-        experiments: [n01x2, n02x2, n04x2, n08x2, n16x2]
-        revisions: [optI-reduction, optI-hybrid, optI-blocking, optI-blockhybrid, optB-blocking, optB-fullblocking, optI-blocking-dual, optI-blockhybrid-dual, optS, optS-distest]
+  # Scaling experiments.
+  - instsets: [scale]
+    experiments: [n16x2]
+    revisions: [optI-reduction]
+  # Dropped: optI-blocking
 
-     # Scaling experiments.
-     - instsets: [scale]
-       experiments: [n16x2]
-       revisions: [optI-reduction]
-       # Dropped: optI-blocking
-
-      # NUMA experiments.
-      #- instsets: [explore]
-      #  experiments: [t02, t12, t24, t48, t01x2, t06x2, t12x2, t24x2]
-      #  revisions: [optI]
+  # NUMA experiments.
+  #- instsets: [explore]
+  #  experiments: [t02, t12, t24, t48, t01x2, t06x2, t12x2, t24x2]
+  #  revisions: [optI]
